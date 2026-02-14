@@ -1,0 +1,55 @@
+import React from 'react';
+import { InstagramIcon, YouTubeIcon, FacebookIcon } from './Icons';
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="bg-background-light pt-24 pb-12 border-t border-primary/10">
+      <div className="max-w-4xl mx-auto px-6 text-center">
+
+
+        <div className="flex justify-center space-x-8 mb-16">
+          <a
+            href="https://www.instagram.com/damiolatunji_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group"
+          >
+            <span className="sr-only">Instagram</span>
+            <InstagramIcon className="w-5 h-5 text-current group-hover:text-white transition-colors" />
+          </a>
+          <a
+            href="https://youtube.com/@damiolatunji"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group"
+          >
+            <span className="sr-only">YouTube</span>
+            <YouTubeIcon className="w-5 h-5 text-current group-hover:text-white transition-colors" />
+          </a>
+          <a
+            href="https://www.facebook.com/damilola.oladele.9026"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group"
+          >
+            <span className="sr-only">Facebook</span>
+            <FacebookIcon className="w-5 h-5 text-current group-hover:text-white transition-colors" />
+          </a>
+        </div>
+
+        <div className="border-t border-primary/5 pt-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-widest font-bold opacity-50 space-y-4 md:space-y-0">
+          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+            <p>© 2026 Dami Olatunji. All rights reserved.</p>
+            <span className="hidden md:inline text-primary/20">•</span>
+            <p>Made with ❤️ by <a href="https://dpeluola.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">David Peluola</a></p>
+          </div>
+          <div className="flex space-x-6">
+            {/* removed Privacy Policy and Terms of Service */}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
