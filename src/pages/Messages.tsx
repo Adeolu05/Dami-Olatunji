@@ -68,110 +68,143 @@ const Messages: React.FC = () => {
 
     return (
         <div className="bg-background-light min-h-screen">
-            {/* Featured Series Hero */}
-            <section className="max-w-7xl mx-auto px-6 py-12">
-                <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden group">
+            {/* Hero Section */}
+            <section className="relative w-full h-[60vh] min-h-[500px] overflow-hidden">
+                {/* Background Image */}
+                <div className="absolute inset-0 w-full h-full">
                     <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnOo5j8MLFPUMydKrxStjOMYEg6SRKGRH-cKKrkV0dozWfHimFxdmxDMqtSuEuLJX16qkgzP8qQXYxgQ1wIayAc0KzipnluVk220AM9YXIlLbG7TXASmdHkX1sxHssZLZDn1XOHmK_j-GzlbrGjp4XUqxqSCGYNTTESz6MIEm1MLiqlFQJ-wIwSDraeoLD2dRLAgL2db3tDnut77m1zAN6k-Za4m1AIXyvrBqEwgsqo1ju1aX4uPEb-gB-TOmIsZuyg5mBXijAt3E"
-                        alt="Featured Series"
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        src="Dami3.jpg"
+                        alt="Dami Olatunji Speaking"
+                        className="w-full h-full object-cover object-center"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-background-dark/90 via-background-dark/40 to-transparent flex items-center p-8 md:p-16">
-                        <div className="max-w-xl text-white">
-                            <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Current Series</span>
-                            <h1 className="serif-heading text-5xl md:text-6xl mb-6 leading-tight">The Architect of Purpose</h1>
-                            <p className="opacity-80 text-lg mb-10 leading-relaxed font-light">Join Pastor Dami as he navigates the complex intersection of divine calling, leadership, and personal growth in this 6-part transformative series.</p>
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col justify-center">
+                    <div className="max-w-3xl pt-20">
+                        <span className="inline-block text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
+                            Resources
+                        </span>
+                        <h1 className="serif-heading text-5xl md:text-7xl leading-tight mb-8 text-white">
+                            Transformational <br />
+                            <span className="italic text-primary">Insights.</span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-200 max-w-xl mb-10 leading-relaxed font-light">
+                            Practical wisdom for life, leadership, and spiritual growth. Explore the latest messages and series.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Featured Series - Moved down */}
+            <section className="max-w-7xl mx-auto px-6 py-12 -mt-20 relative z-20">
+                <div className="bg-white p-8 rounded-xl shadow-2xl border border-neutral-light">
+                    <div className="flex flex-col md:flex-row gap-8 items-center">
+                        <div className="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden">
+                            <img
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnOo5j8MLFPUMydKrxStjOMYEg6SRKGRH-cKKrkV0dozWfHimFxdmxDMqtSuEuLJX16qkgzP8qQXYxgQ1wIayAc0KzipnluVk220AM9YXIlLbG7TXASmdHkX1sxHssZLZDn1XOHmK_j-GzlbrGjp4XUqxqSCGYNTTESz6MIEm1MLiqlFQJ-wIwSDraeoLD2dRLAgL2db3tDnut77m1zAN6k-Za4m1AIXyvrBqEwgsqo1ju1aX4uPEb-gB-TOmIsZuyg5mBXijAt3E"
+                                alt="Featured Series"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div className="w-full md:w-2/3">
+                            <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-2 block">Current Series</span>
+                            <h2 className="serif-heading text-3xl md:text-4xl mb-4">The Architect of Purpose</h2>
+                            <p className="text-neutral-deep/70 mb-6 leading-relaxed">Join Pastor Dami as he navigates the complex intersection of divine calling, leadership, and personal growth in this 6-part transformative series.</p>
                             <div className="flex space-x-4">
                                 <a
                                     href="https://www.youtube.com/@damiolatunji/videos"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-primary text-white px-8 py-4 rounded-lg font-bold tracking-wider uppercase text-xs flex items-center space-x-2 hover:bg-opacity-90 transition-all"
+                                    className="bg-primary text-white px-6 py-3 rounded-lg font-bold tracking-wider uppercase text-xs flex items-center space-x-2 hover:bg-opacity-90 transition-all"
                                 >
                                     <span className="material-icons-outlined text-lg">play_arrow</span>
                                     <span>Watch Series</span>
                                 </a>
-                                <button className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-lg font-bold tracking-wider uppercase text-xs hover:bg-white/20 transition-all">
-                                    Resources
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Filter Bar */}
-            <div className="sticky top-20 z-40 bg-background-light py-6 border-b border-primary/10">
-                <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-center space-x-8 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                        {categories.map((cat, idx) => (
-                            <button key={idx} className={`whitespace-nowrap font-bold text-sm transition-colors ${idx === 0 ? 'text-primary border-b-2 border-primary pb-1' : 'text-neutral-deep/60 hover:text-primary'}`}>
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        <div className="relative group">
-                            <span className="material-icons-outlined absolute left-0 top-1/2 -translate-y-1/2 text-primary/40 text-lg">tune</span>
-                            <select className="pl-6 pr-8 py-2 bg-transparent border-none text-xs font-bold uppercase tracking-wide focus:ring-0 cursor-pointer text-neutral-deep/80">
-                                <option>Newest First</option>
-                                <option>Most Popular</option>
-                                <option>Oldest First</option>
-                            </select>
-                        </div>
-                        <div className="h-6 w-px bg-primary/20"></div>
-                        <div className="flex bg-primary/5 rounded-lg p-1">
-                            <button className="p-1.5 bg-white shadow-sm rounded text-primary"><span className="material-icons-outlined text-sm">grid_view</span></button>
-                            <button className="p-1.5 text-neutral-deep/40 hover:text-primary transition-colors"><span className="material-icons-outlined text-sm">view_list</span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Content & Filters */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+                <div className="flex flex-col lg:flex-row gap-12">
+                    {/* Sticky Sidebar/Filter */}
+                    <div className="lg:w-1/4">
+                        <div className="sticky top-32 space-y-8">
+                            <div>
+                                <h3 className="serif-heading text-xl mb-6 border-b border-primary/20 pb-2">Filter Topics</h3>
+                                <div className="flex flex-col space-y-2">
+                                    {['All Messages', 'Purpose & Calling', 'Leadership', 'Relationships', 'Faith Basics'].map((topic) => (
+                                        <button
+                                            key={topic}
+                                            className="text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 flex justify-between items-center group text-neutral-deep/70 hover:bg-neutral-light hover:text-primary"
+                                        >
+                                            {topic}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
-            {/* Grid */}
-            <div className="max-w-7xl mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-                    {messages.map((msg, idx) => (
-                        <a
-                            key={idx}
-                            href={msg.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group cursor-pointer block"
-                        >
-                            <div className="relative aspect-video rounded-xl overflow-hidden mb-6 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500">
-                                <img src={msg.img} alt={msg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div className="bg-neutral-deep text-white p-6 rounded-xl relative overflow-hidden hidden lg:block">
+                                <div className="absolute top-0 right-0 p-4 opacity-10">
+                                    <span className="material-icons text-6xl">podcasts</span>
+                                </div>
+                                <h4 className="serif-heading text-lg mb-2 relative z-10">Subscribe to Podcast</h4>
+                                <p className="text-xs text-white/60 mb-4 relative z-10">Listen to messages on the go.</p>
+                                <button className="w-full bg-white/10 backdrop-blur-sm hover:bg-white hover:text-neutral-deep transition-all py-2 rounded text-xs font-bold uppercase tracking-wider border border-white/20">
+                                    Apple Podcasts
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-300">
-                                        <span className="material-icons-outlined text-primary text-3xl">
-                                            {msg.type === 'Video' ? 'play_arrow' : 'podcasts'}
-                                        </span>
+                    {/* Message Grid */}
+                    <div className="lg:w-3/4">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {messages.map((msg, idx) => (
+                                <div key={idx} className="bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-primary/5 cursor-pointer">
+                                    <div className="relative aspect-video overflow-hidden">
+                                        <img
+                                            src={msg.img}
+                                            alt={msg.title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center transform scale-50 group-hover:scale-100 transition-transform duration-500 delay-100">
+                                                <span className="material-icons text-white text-3xl ml-1">play_arrow</span>
+                                            </div>
+                                        </div>
+                                        <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">
+                                            {msg.duration}
+                                        </div>
+                                    </div>
+                                    <div className="p-6">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <span className="text-primary text-[10px] font-bold uppercase tracking-widest bg-primary/5 px-2 py-1 rounded-full">{msg.category}</span>
+                                            <span className="text-neutral-muted text-xs">{msg.date}</span>
+                                        </div>
+                                        <h3 className="serif-heading text-xl mb-2 group-hover:text-primary transition-colors leading-tight">{msg.title}</h3>
+                                        <p className="text-sm text-neutral-deep/60 line-clamp-2 leading-relaxed mb-4">{msg.desc}</p>
+                                        <div className="flex items-center text-primary text-xs font-bold uppercase tracking-widest group/link">
+                                            Watch Now
+                                            <span className="material-icons text-sm ml-1 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+                                        </div>
                                     </div>
                                 </div>
+                            ))}
+                        </div>
 
-                                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">
-                                    {msg.duration}
-                                </div>
-                                <div className={`absolute top-3 left-3 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase ${msg.type === 'Video' ? 'bg-primary text-white' : 'bg-white/80 text-primary'}`}>
-                                    {msg.type}
-                                </div>
-                            </div>
-                            <div>
-                                <span className="text-primary text-[10px] font-bold tracking-[0.2em] uppercase block mb-2">{msg.category} • {msg.date}</span>
-                                <h3 className="serif-heading text-2xl mb-3 group-hover:text-primary transition-colors leading-tight">{msg.title}</h3>
-                                <p className="text-neutral-deep/60 text-sm line-clamp-2 leading-relaxed">{msg.desc}</p>
-                            </div>
-                        </a>
-                    ))}
-                </div>
-
-                <div className="mt-24 text-center pb-20">
-                    <button className="group relative px-12 py-5 overflow-hidden rounded-lg bg-transparent">
-                        <span className="relative z-10 text-xs font-bold tracking-[0.3em] uppercase text-neutral-deep group-hover:text-white transition-colors duration-300">Load More Archives</span>
-                        <div className="absolute inset-0 border-2 border-primary/20 group-hover:bg-primary group-hover:border-primary transition-all duration-300 rounded-lg"></div>
-                    </button>
-                    <p className="mt-6 text-neutral-deep/40 text-[10px] tracking-widest uppercase italic">Showing 6 of 124 messages</p>
+                        {/* Pagination / Load More */}
+                        <div className="mt-16 text-center">
+                            <button className="border-b-2 border-neutral-deep pb-1 text-sm font-bold uppercase tracking-widest hover:text-primary hover:border-primary transition-colors">
+                                Load More Messages
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,8 @@ import About from './pages/About';
 import Messages from './pages/Messages';
 import Contact from './pages/Contact';
 
+import ScrollToTopButton from './components/ScrollToTopButton';
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -21,6 +23,7 @@ const App: React.FC = () => {
   return (
     <HashRouter>
       <ScrollToTop />
+      <ScrollToTopButton />
       <div className="flex flex-col min-h-screen overflow-x-hidden">
         <Navbar />
         <main className="flex-grow">
