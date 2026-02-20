@@ -1,5 +1,6 @@
 import React from 'react';
-import { InstagramIcon, YouTubeIcon, FacebookIcon } from '../components/Icons';
+import NewsletterSignup from '../components/NewsletterSignup';
+import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon } from '../components/Icons';
 
 const Contact: React.FC = () => {
     return (
@@ -11,23 +12,23 @@ const Contact: React.FC = () => {
                     <img
                         src="Dami6.jpg"
                         alt="Contact Dami Olatunji"
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover object-center animate-fade-in"
                     />
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
+                    {/* Overlay - Darker */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent/30"></div>
                 </div>
 
                 {/* Content */}
                 <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col justify-center">
-                    <div className="max-w-3xl pt-20">
-                        <span className="inline-block text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
+                    <div className="max-w-4xl pt-20 animate-slide-up">
+                        <span className="inline-block text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 border-b border-primary pb-2">
                             Get in Touch
                         </span>
-                        <h1 className="serif-heading text-5xl md:text-7xl leading-tight mb-8 text-white">
+                        <h1 className="serif-heading text-5xl md:text-7xl lg:text-8xl leading-none mb-8 text-white">
                             Start a <br />
-                            <span className="italic text-primary">Conversation.</span>
+                            <span className="italic text-primary drop-shadow-lg brightness-110">Conversation.</span>
                         </h1>
-                        <p className="text-lg md:text-xl text-gray-200 max-w-xl mb-10 leading-relaxed font-light">
+                        <p className="text-lg md:text-xl text-neutral-200 max-w-xl mb-10 leading-relaxed font-light">
                             Whether for speaking engagements, mentorship, or general inquiries, we'd love to hear from you.
                         </p>
                     </div>
@@ -74,6 +75,15 @@ const Contact: React.FC = () => {
                                 >
                                     <span className="sr-only">Facebook</span>
                                     <FacebookIcon className="w-5 h-5 text-current group-hover:text-white transition-colors" />
+                                </a>
+                                <a
+                                    href="https://www.tiktok.com/@damiolatunji_"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group shadow-lg shadow-transparent hover:shadow-primary/20"
+                                >
+                                    <span className="sr-only">TikTok</span>
+                                    <TikTokIcon className="w-5 h-5 text-current group-hover:text-white transition-colors" />
                                 </a>
                             </div>
                         </div>
@@ -163,6 +173,8 @@ const Contact: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* Newsletter Section */}
+            <NewsletterSignup />
         </div>
     );
 };

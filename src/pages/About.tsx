@@ -1,42 +1,56 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import NewsletterSignup from '../components/NewsletterSignup';
 
 const About: React.FC = () => {
   return (
     <div className="bg-background-light">
       {/* Hero Section */}
-      <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+      <section className="relative w-full h-[75vh] min-h-[600px] overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
             src="Dami2.jpg"
             alt="Dami Olatunji"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-top animate-fade-in"
           />
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+          {/* Enhanced Professional Overlay - Darker for Contrast */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent/30"></div>
+          <div className="absolute inset-0 bg-primary/5 mix-blend-overlay"></div>
         </div>
 
         {/* Content */}
         <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col justify-center">
-          <div className="max-w-3xl pt-20">
-            <span className="inline-block text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-              The Woman Behind the Vision
-            </span>
-            <h1 className="serif-heading text-5xl md:text-7xl lg:text-8xl leading-tight mb-8 text-white">
+          <div className="max-w-4xl pt-20 animate-slide-up">
+            <div className="inline-flex items-center space-x-4 mb-8">
+              <span className="h-[1px] w-12 bg-white/30"></span>
+              <span className="text-white/80 font-bold tracking-[0.3em] uppercase text-[10px]">
+                The Woman Behind the Vision
+              </span>
+            </div>
+
+            <h1 className="serif-heading text-6xl md:text-7xl lg:text-9xl leading-tight mb-8 text-white">
               Meet<br />
-              <span className="italic text-primary">Dami.</span>
+              <span className="italic text-primary relative drop-shadow-lg brightness-110">
+                Dami.
+                <span className="absolute -z-10 bottom-2 left-0 w-full h-4 bg-primary/20 -rotate-1 rounded-sm"></span>
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-200 max-w-xl mb-12 leading-relaxed font-light">
-              Bridging the gap between spiritual excellence and corporate leadership. A story of faith, purpose, and the pursuit of value.
+
+            <p className="text-xl md:text-2xl text-neutral-200 max-w-2xl mb-12 leading-relaxed font-light font-serif italic opacity-90">
+              "Bridging the gap between spiritual excellence and corporate leadership."
             </p>
-            <div className="w-20 h-px bg-primary"></div>
+
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-[2px] bg-primary"></div>
+              <p className="text-sm text-white/60 uppercase tracking-widest font-bold">Scroll for the full story</p>
+            </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <span className="material-icons text-white/50 text-3xl">keyboard_arrow_down</span>
+        <div className="absolute bottom-10 left-10 animate-bounce hidden md:block">
+          <span className="material-icons text-white/30 text-4xl">south</span>
         </div>
       </section>
 
@@ -189,6 +203,8 @@ const About: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* Newsletter Section */}
+      <NewsletterSignup />
     </div>
   );
 };

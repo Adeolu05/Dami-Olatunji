@@ -1,4 +1,5 @@
 import React from 'react';
+import NewsletterSignup from '../components/NewsletterSignup';
 
 const Messages: React.FC = () => {
     const categories = ['All Messages', 'Identity & Purpose', 'Emotional Intelligence', 'Leadership', 'Relationships', 'Finance'];
@@ -69,29 +70,33 @@ const Messages: React.FC = () => {
     return (
         <div className="bg-background-light min-h-screen">
             {/* Hero Section */}
-            <section className="relative w-full h-[60vh] min-h-[500px] overflow-hidden">
+            <section className="relative w-full h-[65vh] min-h-[500px] overflow-hidden">
                 {/* Background Image */}
                 <div className="absolute inset-0 w-full h-full">
                     <img
                         src="Dami3.jpg"
                         alt="Dami Olatunji Speaking"
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover object-center animate-fade-in"
                     />
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
+                    {/* Overlay - Darker */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent/30"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background-light to-transparent opacity-30"></div>
                 </div>
 
                 {/* Content */}
                 <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col justify-center">
-                    <div className="max-w-3xl pt-20">
-                        <span className="inline-block text-primary font-bold tracking-[0.3em] uppercase text-xs mb-6 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                            Resources
-                        </span>
-                        <h1 className="serif-heading text-5xl md:text-7xl leading-tight mb-8 text-white">
+                    <div className="max-w-4xl pt-20 animate-slide-up">
+                        <div className="flex items-center space-x-3 mb-6">
+                            <span className="material-icons text-primary">auto_stories</span>
+                            <span className="text-white/80 font-bold tracking-[0.3em] uppercase text-xs">Resources</span>
+                        </div>
+
+                        <h1 className="serif-heading text-6xl md:text-7xl lg:text-8xl leading-tight mb-8 text-white">
                             Transformational <br />
-                            <span className="italic text-primary">Insights.</span>
+                            <span className="italic text-primary drop-shadow-lg brightness-110">Insights.</span>
                         </h1>
-                        <p className="text-lg md:text-xl text-gray-200 max-w-xl mb-10 leading-relaxed font-light">
+
+                        <p className="text-lg md:text-xl text-neutral-200 max-w-xl mb-10 leading-relaxed font-light border-l border-white/20 pl-6">
                             Practical wisdom for life, leadership, and spiritual growth. Explore the latest messages and series.
                         </p>
                     </div>
@@ -207,6 +212,8 @@ const Messages: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* Newsletter Section */}
+            <NewsletterSignup />
         </div>
     );
 };

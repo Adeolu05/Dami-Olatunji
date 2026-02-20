@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstagramIcon, YouTubeIcon, FacebookIcon } from './Icons';
+import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon } from './Icons';
 
 const Footer: React.FC = () => {
   return (
@@ -34,6 +34,15 @@ const Footer: React.FC = () => {
           >
             <span className="sr-only">Facebook</span>
             <FacebookIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
+          </a>
+          <a
+            href="https://www.tiktok.com/@damiolatunji_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm"
+          >
+            <span className="sr-only">TikTok</span>
+            <TikTokIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
           </a>
         </div>
 
