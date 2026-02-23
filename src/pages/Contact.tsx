@@ -1,6 +1,6 @@
 import React from 'react';
 import NewsletterSignup from '../components/NewsletterSignup';
-import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon } from '../components/Icons';
+import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon, EmailIcon } from '../components/Icons';
 
 const Contact: React.FC = () => {
     return (
@@ -10,7 +10,7 @@ const Contact: React.FC = () => {
                 {/* Background Image */}
                 <div className="absolute inset-0 w-full h-full">
                     <img
-                        src="Dami6.jpg"
+                        src="images/Dami12.jpg"
                         alt="Contact Dami Olatunji"
                         className="w-full h-full object-cover object-center animate-fade-in"
                     />
@@ -47,6 +47,16 @@ const Contact: React.FC = () => {
                             <p className="text-neutral-deep/70 leading-loose text-lg font-light mb-10">
                                 Dami's speaking philosophy is rooted in the intersection of spiritual conviction and strategic excellence. Whether addressing a global corporate summit or a local congregation, she brings a message designed to catalyze immediate action and lasting internal change.
                             </p>
+
+                            <a href="mailto:damiolatunji1406@gmail.com" className="flex items-center space-x-4 mb-10 group w-fit">
+                                <div className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center group-hover:bg-primary transition-all shadow-lg shadow-transparent group-hover:shadow-primary/20">
+                                    <EmailIcon className="w-5 h-5 text-neutral-deep group-hover:text-white transition-colors" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-neutral-deep/40 mb-1">Direct Outreach</p>
+                                    <p className="text-lg font-medium text-neutral-deep group-hover:text-primary transition-colors">damiolatunji1406@gmail.com</p>
+                                </div>
+                            </a>
 
                             <div className="flex space-x-6">
                                 <a
@@ -162,12 +172,12 @@ const Contact: React.FC = () => {
                                 ></textarea>
                             </div>
 
-                            <button
-                                type="submit"
-                                className="w-full bg-primary text-white py-5 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-neutral-deep transition-all duration-300 shadow-xl shadow-primary/20"
+                            <a
+                                href="mailto:damiolatunji1406@gmail.com"
+                                className="block w-full text-center bg-primary text-white py-5 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-neutral-deep transition-all duration-300 shadow-xl shadow-primary/20"
                             >
                                 Submit Booking Request
-                            </button>
+                            </a>
                             <p className="text-[10px] text-center opacity-40 uppercase tracking-widest mt-6">Expect a response from our team within 48 business hours.</p>
                         </form>
                     </div>

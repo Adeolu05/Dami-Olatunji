@@ -74,7 +74,7 @@ const Messages: React.FC = () => {
                 {/* Background Image */}
                 <div className="absolute inset-0 w-full h-full">
                     <img
-                        src="Dami3.jpg"
+                        src="images/Dami3.jpg"
                         alt="Dami Olatunji Speaking"
                         className="w-full h-full object-cover object-center animate-fade-in"
                     />

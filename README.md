@@ -1,39 +1,46 @@
-# Dami Olatunji - Herdentity
+<div align="center">
+  <img src="public/images/Dami1.jpg" alt="Dami Olatunji" width="300" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(192, 38, 105, 0.2); margin-bottom: 20px;" />
 
-A modern, professional portfolio website showcasing the personal brand of Dami Olatunji and the **Herdentity** movement. Built with React, TypeScript, and Vite for optimal performance and developer experience.
-This platform serves as a hub for Dami's speaking engagements, transformational content, and the Herdentity community—equipping women with identity-rooted confidence and leadership skills.
+  # Dami Olatunji - The Voice of Transformation
+  
+  *A premium, highly-optimized portfolio website built for Dami Olatunji and the impactful Herdentity movement.*
+</div>
 
-## 🌟 Features
+---
 
-- **Modern & Responsive Design** - Beautiful, mobile-first design that works seamlessly across all devices
-- **Fast Performance** - Built with Vite for lightning-fast development and optimized production builds
-- **Type Safety** - Full TypeScript support for robust, maintainable code
-- **Single Page Application** - Smooth navigation with React Router
-- **Professional Portfolio** - Showcase work, skills, and achievements
-- **Contact Integration** - Easy-to-use contact form for client inquiries
-- **SEO Optimized** - Configured for optimal search engine visibility
+## 🌟 Overview
 
-## 🛠️ Tech Stack
+This is a modern, high-performance portfolio application designed to showcase Dami's speaking engagements, transformational content, and the **Herdentity** community. It serves as a central hub to equip people globally with identity-rooted confidence and leadership skills.
+
+## ✨ Key Features & Enhancements
+
+- **Stunning Split-Hero Video Carousel:** A beautifully engineered 3D vertical video carousel explicitly optimized to serve portrait videos rapidly across both desktop and mobile views.
+- **Smart Routing Rules:** Enforces clean `BrowserRouter` (No HashRouter) rules so that URLs look exceptionally professional (e.g., `domain.com/about` rather than `domain.com/#/about`).
+- **Global Contact Integration:** One-click integration directly embedded on the contact page and globally inside the footer that seamlessly connects users to `damiolatunji1406@gmail.com`.
+- **Intelligent Responsive Design:** Crafted meticulously with raw Tailwind CSS to look pixel-perfect on every possible screen size. Built "mobile-first" but strictly enhanced for ultra-wide desktops.
+- **Micro-Animations & Flourishes:** Uses `framer-motion` and custom CSS keyframes to provide soft, elegant fade-ins resulting in a "premium" user feel.
+
+## 🛠️ Technology Stack
 
 - **Framework:** React 19
-- **Language:** TypeScript
 - **Build Tool:** Vite 6
-- **Routing:** React Router DOM 7
-- **Styling:** CSS with custom design system
-- **Deployment:** Vercel
+- **Language:** TypeScript (Strict Mode)
+- **Routing:** React Router v7 (`BrowserRouter`)
+- **Styling:** Tailwind CSS + Vanilla CSS (`index.css`)
+- **Icons:** Custom SVG + Lucide React
+- **Animations:** Framer Motion
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - **Node.js** (v18 or higher)
 - **npm** or **yarn**
 
-### Installation
+### Quick Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/dami-olatunji.git
+   git clone <repository_url>
    cd dami-olatunji
    ```
 
@@ -42,102 +49,49 @@ This platform serves as a hub for Dami's speaking engagements, transformational 
    npm install
    ```
 
-3. **Set up environment variables** (if needed)
-   ```bash
-   cp .env.example .env.local
-   # Edit .env.local with your configuration
-   ```
-
-4. **Run the development server**
+3. **Run the local development server**
    ```bash
    npm run dev
    ```
+   Navigate to `http://localhost:5173` in your browser.
 
-5. **Open your browser**
-   Navigate to `http://localhost:5173`
+## 🏗️ Production Build Config
 
-## 📜 Available Scripts
-
-- **`npm run dev`** - Start development server with hot reload
-- **`npm run build`** - Create production build
-- **`npm run preview`** - Preview production build locally
-- **`npm run lint`** - Run ESLint for code quality checks
-- **`npm run format`** - Format code with Prettier
-- **`npm run type-check`** - Run TypeScript type checking
-
-## 📁 Project Structure
-
-```
-dami-olatunji/
-├── components/          # Reusable React components
-│   ├── Navbar.tsx
-│   └── Footer.tsx
-├── pages/              # Page components
-│   ├── Home.tsx
-│   ├── About.tsx
-│   ├── Contact.tsx
-│   └── Messages.tsx
-├── App.tsx             # Main application component
-├── index.tsx           # Application entry point
-├── index.html          # HTML template
-├── vite.config.ts      # Vite configuration
-├── tsconfig.json       # TypeScript configuration
-└── package.json        # Project dependencies
-```
-
-## 🌐 Deployment
-
-This project is configured for easy deployment on Vercel:
-
-1. Push your code to GitHub
-2. Import the repository in Vercel
-3. Deploy with zero configuration needed
-
-For other platforms, build the production bundle:
+This project is exceptionally optimized to compile into a tiny payload. When pushing to Vercel/Netlify, simply use:
 ```bash
 npm run build
 ```
-The `dist/` folder will contain your production-ready application.
+It compiles in under ~4 seconds and runs full TypeScript typing and Linting checks automatically.
 
-## 🤝 Contributing
+## 📁 Repository Architecture
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+```text
+dami-olatunji/
+├── public/                 
+│   ├── images/             # Optimized image assets (e.g., Dami1.jpg)
+│   └── videos/             # Source .mp4s for the Hero Carousel
+├── src/                    
+│   ├── components/         # Reusable globally injected UI elements (Navbar, Footer, VideoCarousel)
+│   ├── pages/              # Primary routable views (Home, About, Messages, Contact)
+│   ├── App.tsx             # Root Router Configuration
+│   ├── index.css           # Core styling layer and Tailwind injection
+│   └── main.tsx            # App Entry
+├── .cursorrules            # Agentic memory/rules (e.g., Enforcing BrowserRouter)
+├── .windsurfrules          # Global routing fallback rules
+├── tailwind.config.js      # Custom theme setup (Colors: "Empowered Magenta", "Rose Essence")
+└── vite.config.ts          # Core builder settings
+```
 
-## 📝 License
+## 📧 Direct Contact
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🌐 Social Media & Community
-
-Connect with Dami and the **Herdentity** movement:
-
+To reach Dami Olatunji for speaking engagements or mentorship:
+- **Email:** [damiolatunji1406@gmail.com](mailto:damiolatunji1406@gmail.com)
 - **Instagram:** [@damiolatunji_](https://www.instagram.com/damiolatunji_)
-- **YouTube:** [Herdentity / Dami Olatunji](https://youtube.com/@damiolatunji)
+- **YouTube:** [@damiolatunji](https://youtube.com/@damiolatunji)
+- **TikTok:** [@damiolatunji_](https://www.tiktok.com/@damiolatunji_)
 - **Facebook:** [Damilola Oladele](https://www.facebook.com/damilola.oladele.9026)
 
-## 📺 Messages & Content
-
-The **Messages** page serves as a portal to the Herdentity YouTube channel, organized by key pillars:
-- Emotional Intelligence & Resilience
-- Self-Leadership & Discipline
-- Financial Confidence
-- Career Clarity
-- Healthy Relationships
-- Identity & Purpose
-
-## 📧 Contact
-
-**Dami Olatunji**
-- Website: [dpeluola.com](https://dpeluola.com)
-- Email: your.email@example.com
-
-## 🙏 Acknowledgments
-
-- Built with [Vite](https://vitejs.dev/)
-- Powered by [React](https://react.dev/)
-- Deployed on [Vercel](https://vercel.com/)
-
 ---
-
-Made with ❤️ by [David Peluola](https://dpeluola.com)
-# Dami-Olatunji
+<div align="center">
+  <small>Made with ❤️ by <a href="https://dpeluola.com">David Peluola</a></small>
+</div>

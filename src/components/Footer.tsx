@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon } from './Icons';
+import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon, EmailIcon } from './Icons';
 
 const Footer: React.FC = () => {
   return (
@@ -7,12 +7,19 @@ const Footer: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 text-center">
 
 
-        <div className="flex justify-center space-x-8 mb-10">
+        <div className="flex flex-wrap justify-center gap-6 mb-10 px-4">
+          <a
+            href="mailto:damiolatunji1406@gmail.com"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm shrink-0"
+          >
+            <span className="sr-only">Email</span>
+            <EmailIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
+          </a>
           <a
             href="https://www.instagram.com/damiolatunji_"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm shrink-0"
           >
             <span className="sr-only">Instagram</span>
             <InstagramIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
@@ -21,7 +28,7 @@ const Footer: React.FC = () => {
             href="https://youtube.com/@damiolatunji"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm shrink-0"
           >
             <span className="sr-only">YouTube</span>
             <YouTubeIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
@@ -30,7 +37,7 @@ const Footer: React.FC = () => {
             href="https://www.facebook.com/damilola.oladele.9026"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm shrink-0"
           >
             <span className="sr-only">Facebook</span>
             <FacebookIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />
@@ -39,7 +46,7 @@ const Footer: React.FC = () => {
             href="https://www.tiktok.com/@damiolatunji_"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm"
+            className="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all text-neutral-deep group bg-white shadow-sm shrink-0"
           >
             <span className="sr-only">TikTok</span>
             <TikTokIcon className="w-4 h-4 text-current group-hover:text-white transition-colors" />

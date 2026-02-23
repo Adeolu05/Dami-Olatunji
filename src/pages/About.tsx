@@ -10,7 +10,7 @@ const About: React.FC = () => {
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
-            src="Dami2.jpg"
+            src="images/Dami9.jpg"
             alt="Dami Olatunji"
             className="w-full h-full object-cover object-top animate-fade-in"
           />
@@ -81,7 +81,7 @@ const About: React.FC = () => {
             <div className="order-2 lg:order-1 relative group">
               <img
                 className="rounded-2xl w-full aspect-[4/5] object-cover shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]"
-                src="Dami5.jpg"
+                src="images/Dami8.jpg"
                 alt="Pastor Dami"
               />
               <div className="absolute top-1/2 -right-12 w-64 h-64 border-[1px] border-primary/20 rounded-full -z-10 group-hover:scale-110 transition-transform duration-1000"></div>
@@ -152,7 +152,7 @@ const About: React.FC = () => {
               <div className="absolute -bottom-10 -right-10 w-2/3 hidden md:block z-20 group-hover:-translate-y-4 transition-transform duration-500">
                 <img
                   className="rounded-xl shadow-2xl border-4 border-white"
-                  src="herdentity.jpg"
+                  src="images/herdentity.jpg"
                   alt="Strategy Session"
                 />
               </div>

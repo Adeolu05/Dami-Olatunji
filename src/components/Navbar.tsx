@@ -4,7 +4,7 @@ import { Menu, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import PromoBanner from './PromoBanner';
-import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon } from './Icons';
+import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon, EmailIcon } from './Icons';
 
 const NAV_LINKS = [
   { name: 'Home', path: '/' },
@@ -14,6 +14,7 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
+  { icon: EmailIcon, href: "mailto:damiolatunji1406@gmail.com", label: "Email" },
   { icon: InstagramIcon, href: "https://www.instagram.com/damiolatunji_", label: "Instagram" },
   { icon: YouTubeIcon, href: "https://youtube.com/@damiolatunji", label: "YouTube" },
   { icon: FacebookIcon, href: "https://www.facebook.com/damilola.oladele.9026", label: "Facebook" },

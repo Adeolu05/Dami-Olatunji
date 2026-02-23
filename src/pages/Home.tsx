@@ -1,36 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NewsletterSignup from '../components/NewsletterSignup';
+import VideoCarousel from '../components/VideoCarousel';
 
 const Home: React.FC = () => {
   return (
     <div className="bg-background-light">
       {/* Editorial Hero Section */}
-      {/* Hero Section */}
-      <header className="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center pt-24 lg:pt-40 pb-20 lg:pb-32">
+      <VideoCarousel />
+
+      {/* Identity Banner Section (Former Hero) */}
+      <section className="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center pt-24 lg:pt-40 pb-20 lg:pb-32 bg-neutral-deep mt-12 lg:mt-0">
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
-            src="Dami1.jpg"
+            src="images/Dami1.jpg"
             alt="Dami Olatunji"
             className="w-full h-full object-cover object-center animate-fade-in"
           />
           {/* Enhanced Overlay for Professional Depth - Darker for Contrast */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent/30 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-background-light via-transparent to-transparent opacity-60"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-background-light via-transparent to-transparent opacity-100 h-24"></div>
         </div>
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center lg:items-start text-center lg:text-left mt-8 lg:mt-0">
           <div className="max-w-4xl animate-slide-up flex flex-col items-center lg:items-start">
-            <div className="inline-flex items-center justify-center space-x-3 mb-6 lg:mb-8">
+            <div className="inline-flex items-center justify-center space-x-3 mb-6 lg:mb-8 mt-10 lg:mt-0">
               <span className="hidden lg:block h-[1px] w-8 bg-primary"></span>
               <span className="text-primary font-bold tracking-[0.3em] uppercase text-[10px] bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-sm">
                 Pastor • Speaker • CEO
               </span>
             </div>
 
-            <h1 className="serif-heading text-6xl md:text-7xl lg:text-9xl leading-[1.1] mb-6 lg:mb-8 text-white tracking-tight">
+            <h2 className="serif-heading text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 lg:mb-8 text-white tracking-tight">
               Faith.<br className="lg:hidden" />
               <span className="hidden lg:inline"> </span>
               Purpose.<br className="lg:hidden" />
@@ -41,7 +44,7 @@ const Home: React.FC = () => {
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="none" />
                 </svg>
               </span>
-            </h1>
+            </h2>
 
             <p className="text-lg md:text-xl text-neutral-200 max-w-xl mb-12 leading-relaxed font-light border-0 lg:border-l-2 border-primary/50 lg:pl-6 mx-auto lg:mx-0">
               Guiding a generation toward their divine assignment through spiritual wisdom and leadership excellence.
@@ -54,27 +57,10 @@ const Home: React.FC = () => {
               >
                 Explore the Vision
               </Link>
-              <Link
-                to="/messages"
-                className="group flex items-center justify-center space-x-4 text-white hover:text-primary transition-all duration-300 w-full sm:w-auto"
-              >
-                <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all backdrop-blur-sm shrink-0">
-                  <span className="material-icons text-2xl group-hover:text-primary transition-colors pl-1">play_arrow</span>
-                </div>
-                <span className="text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">Watch Latest</span>
-              </Link>
             </div>
           </div>
         </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="flex flex-col items-center space-y-2 opacity-50">
-            <span className="text-[10px] uppercase tracking-widest text-white">Scroll</span>
-            <span className="material-icons text-white text-3xl">keyboard_arrow_down</span>
-          </div>
-        </div>
-      </header>
+      </section>
 
       {/* Meet Dami Section */}
       <section className="py-24 lg:py-32 px-6 lg:px-12 bg-white relative overflow-hidden">
@@ -84,7 +70,7 @@ const Home: React.FC = () => {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <div className="relative group">
                 <img
-                  src="Dami2.jpg"
+                  src="images/Dami11.jpg"
                   alt="Dami Speaking"
                   className="rounded-lg shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700 w-full object-cover aspect-[4/5]"
                 />
@@ -183,7 +169,7 @@ const Home: React.FC = () => {
             <div className="w-full lg:w-1/2 relative group">
               <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                 <img
-                  src="/herdentity.jpg"
+                  src="images/herdentity.jpg"
                   alt="Herdentity Movement"
                   className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
                 />
