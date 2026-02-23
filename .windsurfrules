@@ -1,5 +1,0 @@
-# Routing Guidelines
-From today henceforth:
-- ALWAYS use `BrowserRouter` from `react-router-dom`.
-- NEVER use `HashRouter`.
-- Ensure all URLs are clean (e.g. `http://localhost:3000/about` instead of `http://localhost:3000/#/about`).
