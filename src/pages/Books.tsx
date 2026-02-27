@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 
 const Books: React.FC = () => {
     return (
-        <div className="bg-[#FAF3F0] min-h-screen pt-20 md:pt-28 pb-16 md:pb-20 flex items-center">
+        <div className="bg-[#FAF3F0] min-h-screen pt-36 md:pt-44 lg:pt-48 pb-16 md:pb-20 flex items-center">
             {/* The Book Entry */}
             <section className="w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
                 <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-12 sm:gap-16 lg:gap-24">
