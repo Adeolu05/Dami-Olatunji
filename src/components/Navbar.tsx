@@ -9,6 +9,7 @@ import { InstagramIcon, YouTubeIcon, FacebookIcon, TikTokIcon, EmailIcon } from 
 const NAV_LINKS = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
+  { name: 'Books', path: '/books' },
   { name: 'Messages', path: '/messages' },
   { name: 'Herdentity', path: 'https://herdentity.vercel.app', external: true },
 ];
@@ -46,6 +47,10 @@ const Navbar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Pages with a light background at the very top need dark text regardless of scroll state
+  const isLightBackgroundPage = location.pathname === '/books';
+  const forceDarkText = scrolled || isMobileMenuOpen || isLightBackgroundPage;
+
   return (
     <nav
       className={clsx(
@@ -68,7 +73,7 @@ const Navbar: React.FC = () => {
             <Link to="/" className="group" onClick={() => setIsMobileMenuOpen(false)}>
               <span className={clsx(
                 "serif-heading text-2xl font-bold tracking-tight transition-colors duration-300 group-hover:text-primary",
-                (!scrolled && !isMobileMenuOpen) ? "text-white" : "text-neutral-deep"
+                !forceDarkText ? "text-white" : "text-neutral-deep"
               )}>
                 DAMI OLATUNJI
               </span>
@@ -86,7 +91,7 @@ const Navbar: React.FC = () => {
                     rel="noopener noreferrer"
                     className={clsx(
                       "text-xs font-bold uppercase tracking-[0.15em] hover:text-primary transition-colors duration-300 relative group",
-                      !scrolled ? "text-white/90" : "text-neutral-deep/80"
+                      !forceDarkText ? "text-white/90" : "text-neutral-deep/80"
                     )}
                   >
                     {link.name}
@@ -98,8 +103,8 @@ const Navbar: React.FC = () => {
                     className={clsx(
                       'text-xs font-bold uppercase tracking-[0.15em] transition-colors duration-300 relative group',
                       isActive(link.path)
-                        ? (!scrolled ? 'text-white' : 'text-primary')
-                        : (!scrolled ? 'text-white/90 hover:text-primary' : 'text-neutral-deep/80 hover:text-primary')
+                        ? (!forceDarkText ? 'text-white' : 'text-primary')
+                        : (!forceDarkText ? 'text-white/90 hover:text-primary' : 'text-neutral-deep/80 hover:text-primary')
                     )}
                   >
                     {link.name}
@@ -128,7 +133,7 @@ const Navbar: React.FC = () => {
               "md:hidden z-50 relative p-2 -mr-2 transition-colors focus:outline-none hover:text-primary",
               isMobileMenuOpen
                 ? "text-neutral-deep"
-                : (!scrolled ? "text-white" : "text-neutral-deep")
+                : (!forceDarkText ? "text-white" : "text-neutral-deep")
             )}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"

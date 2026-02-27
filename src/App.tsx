@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Messages from './pages/Messages';
 import Contact from './pages/Contact';
+import ThankYou from './pages/ThankYou';
+import Books from './pages/Books';
 
 import ScrollToTopButton from './components/ScrollToTopButton';
 
@@ -32,6 +34,8 @@ const App: React.FC = () => {
             <Route path="/about" element={<About />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/books" element={<Books />} />
           </Routes>
         </main>
         <Footer />
