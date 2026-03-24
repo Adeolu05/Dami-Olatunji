@@ -85,10 +85,10 @@ const Home: React.FC = () => {
               </h2>
               <div className="space-y-6 text-neutral-deep/80 text-lg leading-relaxed font-light">
                 <p>
-                  Dami Olatunji is a visionary leader dedicated to the holistic transformation of individuals. With a unique blend of spiritual insight and corporate acumen, he bridges the gap between ancient truths and modern application.
+                  Dami Olatunji is a visionary leader dedicated to the holistic transformation of individuals. With a unique blend of spiritual insight and corporate acumen, she bridges the gap between ancient truths and modern application.
                 </p>
                 <p>
-                  As a Pastor, he nurtures souls with compassion. As a Speaker, he ignites minds with clarity. As the CEO of Valuedity, he empowers professionals to scale their impact through value-driven leadership.
+                  As a Pastor, she nurtures souls with compassion. As a Speaker, she ignites minds with clarity. As the CEO of Valuedity, she empowers professionals to scale their impact through value-driven leadership.
                 </p>
               </div>
               <div className="mt-12 flex flex-wrap gap-12 border-t border-neutral-muted pt-8">

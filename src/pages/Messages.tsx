@@ -6,24 +6,24 @@ const Messages: React.FC = () => {
 
     const messages = [
         {
-            title: "Building Emotional Intelligence & Resilience",
+            title: "How to Be More Confident in Yourself",
             category: "Emotional Intelligence",
             date: "Recent Upload",
-            duration: "15:00",
+            duration: "05:51",
             type: "Video",
-            desc: "Discover how to navigate life's challenges with grace and strength. Learn the keys to emotional mastery.",
-            link: "https://www.youtube.com/@damiolatunji/videos",
-            img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            desc: "In this video, we dive deep into how to stop people-pleasing, set healthy boundaries, and build confidence that comes from within.",
+            link: "https://youtu.be/RXPIZFhRn44?si=6aYvt5Nb_acLq9P9",
+            img: "images/Blue Modern Youtube Thumbnail.PNG"
         },
         {
-            title: "Self-Leadership & Discipline: The Foundation of Success",
-            category: "Leadership",
+            title: "STOP FAKING CONFIDENCE 🛑✋ Here's What Women Actually Need",
+            category: "Emotional Intelligence",
             date: "Recent Upload",
-            duration: "20:00",
+            duration: "03:27",
             type: "Video",
-            desc: "True leadership starts with leading yourself. Unlock the discipline needed to achieve your goals.",
-            link: "https://www.youtube.com/@damiolatunji/videos",
-            img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            desc: "Confidence is something many women chase, motivation, affirmations, and self-help tips. Yet even after doing everything \"right,\" something still feels missing.",
+            link: "https://www.youtube.com/watch?v=G_AwQfhwjkQ",
+            img: "images/IMG_8048.PNG"
         },
         {
             title: "Financial Confidence & Independence for Women",
@@ -117,7 +117,7 @@ const Messages: React.FC = () => {
                         <div className="w-full md:w-2/3">
                             <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-2 block">Current Series</span>
                             <h2 className="serif-heading text-3xl md:text-4xl mb-4">The Architect of Purpose</h2>
-                            <p className="text-neutral-deep/70 mb-6 leading-relaxed">Join Pastor Dami as he navigates the complex intersection of divine calling, leadership, and personal growth in this 6-part transformative series.</p>
+                            <p className="text-neutral-deep/70 mb-6 leading-relaxed">Join Pastor Dami as she navigates the complex intersection of divine calling, leadership, and personal growth in this 6-part transformative series.</p>
                             <div className="flex space-x-4">
                                 <a
                                     href="https://www.youtube.com/@damiolatunji/videos"
@@ -171,7 +171,7 @@ const Messages: React.FC = () => {
                     <div className="lg:w-3/4">
                         <div className="grid md:grid-cols-2 gap-8">
                             {messages.map((msg, idx) => (
-                                <div key={idx} className="bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-primary/5 cursor-pointer">
+                                <a key={idx} href={msg.link} target="_blank" rel="noopener noreferrer" className="bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 group border border-transparent hover:border-primary/5 cursor-pointer block no-underline text-inherit">
                                     <div className="relative aspect-video overflow-hidden">
                                         <img
                                             src={msg.img}
@@ -199,7 +199,7 @@ const Messages: React.FC = () => {
                                             <span className="material-icons text-sm ml-1 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             ))}
                         </div>
 
