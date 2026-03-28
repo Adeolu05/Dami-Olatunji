@@ -2,6 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import NewsletterSignup from '../components/NewsletterSignup';
 import VideoCarousel from '../components/VideoCarousel';
+import youtubeCatalog from '../data/youtubeMessages.json';
+import { sortVideosNewestFirst } from '../lib/youtubeCatalog';
+
+const videosNewestFirst = sortVideosNewestFirst(youtubeCatalog.videos);
+const longFormVideos = videosNewestFirst.filter((v) => v.type === 'Video');
+const homeLatestMessages = (longFormVideos.length >= 2 ? longFormVideos : videosNewestFirst).slice(0, 2);
 
 const Home: React.FC = () => {
   return (
@@ -88,7 +94,7 @@ const Home: React.FC = () => {
                   Dami Olatunji is a visionary leader dedicated to the holistic transformation of individuals. With a unique blend of spiritual insight and corporate acumen, she bridges the gap between ancient truths and modern application.
                 </p>
                 <p>
-                  As a Pastor, she nurtures souls with compassion. As a Speaker, she ignites minds with clarity. As the CEO of Valuedity, she empowers professionals to scale their impact through value-driven leadership.
+                  As a Pastor, she nurtures souls with compassion. As a Speaker, she ignites minds with clarity. As the CEO of Herdentity, she empowers professionals to scale their impact through value-driven leadership.
                 </p>
               </div>
               <div className="mt-12 flex flex-wrap gap-12 border-t border-neutral-muted pt-8">
@@ -121,28 +127,15 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD3bdtqT_09CIIs0V3koIoMd7jnOPZmzhaczHrENfj4Tan8kLD8y6EycfR6jDBa2xmj_OMzmQqvs0gT33rh7BaB4ScxY_EBO_steNzpyhzfLwIyS2wjKzoaGmlJff6jQOWF8AqUlpUwVEERv8perhNjHLxEH3BE3korSBs6P1h6HgiVTatO1LcNN36Q8i2wwBhJMTnxevB0uofuiQNA4PrATfWw-jHVpL7kBQyT77RAp-CgnUPZCGGCUm8VxgDn2T49h-RnQeK2DLQ",
-                category: "Sermon Series",
-                title: "The Architecture of Purpose",
-                desc: "A deep dive into discovering your divine blueprint."
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCDQkHf2HVmpQxNLpYZuJQWix1uvm7bQ6e5MF4UNFx85MVjbbEbTXMh5zrO8XAuzdnZqpqZacdDZC49_YnUHKwcmgmNH0HStF224SxPuwFJlMLKjgrQoRoJgsObdbxfk0e77gbjx04nmMgaQ6O7W5nAwMPmel-PQBTGN_OBMVt4b2_Yy3TmB2IodISM_EMDC7l8IvFDNh8-289ujy5NG0l9VfGPCESNb2f43zdf_RdpWvLnCvGJ_9KAKT9jgYujk-kzumKe47X1wqE",
-                category: "Leadership Insight",
-                title: "Leading from the Future",
-                desc: "Principles for visionary leadership in modern times."
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDZSa2detn7k0eN2KfXRgOu_PLDjJ3GqV0HRq2rMB_IOp2WnkFJaJwZPC5GhzVeKsrIYa7UMf-uyBEWWxgce5xoCbj2MTcLPhepm7rDlHDuXPL9B0lxa3s9-TVhv5z0o1ZjL4ZJukTyO_m3OaWc-U_DOGMxBb-9VryehMS90MOB-VQW4rXzjpbAdOX6pZZEXfYiStIUQGgCdGVlR5TU52dx2s4MW1FLLA8KsoLreThl6BA8GN8Fr3VaRGZc1mtf8vQHG2lvosbhaZ0",
-                category: "Spiritual Growth",
-                title: "The Power of Silence",
-                desc: "Finding God's voice amidst the noise of the world."
-              }
-            ].map((item, idx) => (
-              <div key={idx} className="group cursor-pointer bg-white p-4 pb-8 rounded-2xl hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {homeLatestMessages.map((item) => (
+              <a
+                key={item.videoId}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block bg-white p-4 pb-8 rounded-2xl hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 no-underline text-inherit"
+              >
                 <div className="relative aspect-video overflow-hidden rounded-xl mb-6">
                   <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
@@ -154,15 +147,17 @@ const Home: React.FC = () => {
                 <div className="px-2">
                   <span className="text-primary text-[10px] font-bold uppercase tracking-widest">{item.category}</span>
                   <h3 className="serif-heading text-xl mt-3 mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
-                  <p className="text-sm text-neutral-deep/60 leading-relaxed line-clamp-2">{item.desc}</p>
+                  <p className="text-sm text-neutral-deep/60 leading-relaxed line-clamp-2">
+                    {item.desc ? item.desc : 'Watch on YouTube for the full message.'}
+                  </p>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Valuedity Business Highlight */}
+      {/* Herdentity highlight */}
       <section className="py-24 lg:py-32 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="bg-neutral-light rounded-[2rem] p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">

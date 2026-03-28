@@ -90,7 +90,7 @@ const About: React.FC = () => {
               <div className="text-primary text-xs font-bold tracking-[0.2em] uppercase mb-6">Ministry & Leadership</div>
               <h3 className="serif-heading text-5xl mb-8 leading-tight">Pastor at RCCG LSC Derby</h3>
               <p className="text-neutral-deep/70 mb-10 leading-relaxed text-lg font-light">
-                At the heart of the Living Spring Chapel Derby, Dami serves as a spiritual anchor and visionary leader. Her ministry is characterized by a "no-walls" approach, focusing on creating a community where faith meets contemporary life.
+                At the heart of the Living Seed Church Derby, Dami serves as a spiritual anchor and visionary leader. Her ministry is characterized by a "no-walls" approach, focusing on creating a community where faith meets contemporary life.
               </p>
               <Link to="/messages" className="inline-flex items-center text-primary group font-bold tracking-widest text-xs uppercase border-b border-primary pb-1 hover:text-neutral-deep hover:border-neutral-deep transition-all">
                 Explore the Ministry
@@ -147,7 +147,7 @@ const About: React.FC = () => {
               <img
                 className="rounded-2xl w-full aspect-square object-cover shadow-2xl z-10 relative"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgV0_i2-IzVeKhxLfVwNsm1iB2Pv04C3GxSf_Cux511c8IM9OZp_vU0nuRqgaGJ16gN6Suvpaw6G-F0Y_YN0QScBrxq3ODAUYUQvEx91BwE99Jzw5rFahUGvRcxydk2lsfQPIlsdHv7FTr0RjmF7lYfZ9TUSw8bKNL9SFb4ynm6_np2E6gdyFiib_Tj_g5lLbhIxcufwSuFMGQP5bceLkw8E7nsyL10opSiCLAUtFfq_ZeG7QsSSuiO2vvouHaSU7JUYi63VfCntM"
-                alt="Valuedity Office"
+                alt="Herdentity"
               />
               <div className="absolute -bottom-10 -right-10 w-2/3 hidden md:block z-20 group-hover:-translate-y-4 transition-transform duration-500">
                 <img
