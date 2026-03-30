@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import NewsletterSignup from '../components/NewsletterSignup';
 import VideoCarousel from '../components/VideoCarousel';
 import youtubeCatalog from '../data/youtubeMessages.json';
-import { sortVideosNewestFirst } from '../lib/youtubeCatalog';
+import { onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
 
-const videosNewestFirst = sortVideosNewestFirst(youtubeCatalog.videos);
-const longFormVideos = videosNewestFirst.filter((v) => v.type === 'Video');
-const homeLatestMessages = (longFormVideos.length >= 2 ? longFormVideos : videosNewestFirst).slice(0, 2);
+const homeLatestMessages = sortVideosNewestFirst(onlyMainVideos(youtubeCatalog.videos)).slice(0, 2);
 
 const Home: React.FC = () => {
   return (
@@ -94,7 +92,7 @@ const Home: React.FC = () => {
                   Dami Olatunji is a visionary leader dedicated to the holistic transformation of individuals. With a unique blend of spiritual insight and corporate acumen, she bridges the gap between ancient truths and modern application.
                 </p>
                 <p>
-                  As a Pastor, she nurtures souls with compassion. As a Speaker, she ignites minds with clarity. As the CEO of Herdentity, she empowers professionals to scale their impact through value-driven leadership.
+                  As a Pastor, she nurtures souls with compassion. As a Speaker, she ignites minds with clarity. As the Founder of Herdentity, she empowers professionals to scale their impact through value-driven leadership.
                 </p>
               </div>
               <div className="mt-12 flex flex-wrap gap-12 border-t border-neutral-muted pt-8">

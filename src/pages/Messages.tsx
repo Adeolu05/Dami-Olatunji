@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import NewsletterSignup from '../components/NewsletterSignup';
 import youtubeCatalog from '../data/youtubeMessages.json';
-import { filterTopicsFromVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
+import { filterTopicsFromVideos, onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
 
 const INITIAL_VISIBLE = 8;
 const LOAD_MORE_STEP = 8;
@@ -12,9 +12,9 @@ function matchesFilter(topic: string, category: string): boolean {
   return category === topic;
 }
 
-/** Prefer long-form uploads for the hero card; fall back to newest item (list already newest-first). */
+/** Newest main video (list is long-form only, newest-first). */
 function pickFeaturedVideo(sorted: typeof youtubeCatalog.videos) {
-  return sorted.find((v) => v.type === 'Video') ?? sorted[0] ?? null;
+  return sorted[0] ?? null;
 }
 
 function cleanVideoTitle(title: string) {
@@ -38,7 +38,10 @@ function teaserDescription(desc: string, maxLen = 320) {
 }
 
 const Messages: React.FC = () => {
-  const sortedMessages = useMemo(() => sortVideosNewestFirst(youtubeCatalog.videos), [youtubeCatalog.videos]);
+  const sortedMessages = useMemo(
+    () => sortVideosNewestFirst(onlyMainVideos(youtubeCatalog.videos)),
+    [youtubeCatalog.videos],
+  );
   const featuredVideo = useMemo(() => pickFeaturedVideo(sortedMessages), [sortedMessages]);
   const filterOptions = useMemo(() => filterTopicsFromVideos(sortedMessages), [sortedMessages]);
 
@@ -102,7 +105,7 @@ const Messages: React.FC = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-neutral-200 max-w-xl mb-10 leading-relaxed font-light border-l border-white/20 pl-6">
-              Practical wisdom for life, leadership, and spiritual growth. Explore the latest messages and series.
+              Practical wisdom for life, leadership, and spiritual growth. Full-length teachings from YouTube—no Shorts.
             </p>
           </div>
         </div>
@@ -131,9 +134,6 @@ const Messages: React.FC = () => {
                   <span className="text-neutral-muted text-xs">{featuredVideo.date}</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-primary/80 bg-primary/5 px-2 py-0.5 rounded-full">
                     {featuredVideo.category}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-deep/50 border border-neutral-muted px-2 py-0.5 rounded-full">
-                    {featuredVideo.type}
                   </span>
                 </div>
                 <h2 className="serif-heading text-3xl md:text-4xl mb-4 leading-tight">{cleanVideoTitle(featuredVideo.title)}</h2>
@@ -235,15 +235,32 @@ const Messages: React.FC = () => {
 
             {visible.length === 0 ? (
               <div className="rounded-2xl border border-neutral-light bg-white p-12 text-center text-neutral-deep/70">
-                <p className="serif-heading text-xl mb-2">No messages in this category yet.</p>
-                <p className="text-sm mb-6">Try another topic or view all messages.</p>
-                <button
-                  type="button"
-                  onClick={() => handleFilterChange('All Messages')}
-                  className="text-primary text-xs font-bold uppercase tracking-widest border-b-2 border-primary pb-1"
-                >
-                  Clear filter
-                </button>
+                {sortedMessages.length === 0 ? (
+                  <>
+                    <p className="serif-heading text-xl mb-2">No full-length videos yet.</p>
+                    <p className="text-sm mb-6">This page lists full-length videos only. Shorts stay on YouTube.</p>
+                    <a
+                      href="https://www.youtube.com/@damiolatunji/videos"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary text-xs font-bold uppercase tracking-widest border-b-2 border-primary pb-1"
+                    >
+                      Open YouTube channel
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <p className="serif-heading text-xl mb-2">No messages in this category yet.</p>
+                    <p className="text-sm mb-6">Try another topic or view all messages.</p>
+                    <button
+                      type="button"
+                      onClick={() => handleFilterChange('All Messages')}
+                      className="text-primary text-xs font-bold uppercase tracking-widest border-b-2 border-primary pb-1"
+                    >
+                      Clear filter
+                    </button>
+                  </>
+                )}
               </div>
             ) : (
               <div className="grid md:grid-cols-2 gap-8">
@@ -265,11 +282,6 @@ const Messages: React.FC = () => {
                         <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center transform scale-50 group-hover:scale-100 transition-transform duration-500 delay-100">
                           <span className="material-icons text-white text-3xl ml-1">play_arrow</span>
                         </div>
-                      </div>
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        <span className="bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">
-                          {msg.type}
-                        </span>
                       </div>
                       {msg.duration ? (
                         <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">
