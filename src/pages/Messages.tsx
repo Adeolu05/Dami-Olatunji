@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import NewsletterSignup from '../components/NewsletterSignup';
 import youtubeCatalog from '../data/youtubeMessages.json';
-import { filterTopicsFromVideos, onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
+import { cleanVideoTitle, filterTopicsFromVideos, onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
 
 const INITIAL_VISIBLE = 8;
 const LOAD_MORE_STEP = 8;
@@ -15,15 +15,6 @@ function matchesFilter(topic: string, category: string): boolean {
 /** Newest main video (list is long-form only, newest-first). */
 function pickFeaturedVideo(sorted: typeof youtubeCatalog.videos) {
   return sorted[0] ?? null;
-}
-
-function cleanVideoTitle(title: string) {
-  return title
-    .replace(/\u200b/g, '')
-    .replace(/\s*\|\s*Herdentity.*$/i, '')
-    .replace(/\s*@\s*herdentity\s*/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 function teaserDescription(desc: string, maxLen = 320) {
@@ -82,7 +73,7 @@ const Messages: React.FC = () => {
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
-            src="images/Dami3.jpg"
+            src="/images/Dami3.jpg"
             alt="Dami Olatunji Speaking"
             className="w-full h-full object-cover object-center animate-fade-in"
           />
@@ -275,7 +266,8 @@ const Messages: React.FC = () => {
                     <div className="relative aspect-video overflow-hidden">
                       <img
                         src={msg.img}
-                        alt={msg.title}
+                        alt={cleanVideoTitle(msg.title)}
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
@@ -294,7 +286,7 @@ const Messages: React.FC = () => {
                         <span className="text-primary text-[10px] font-bold uppercase tracking-widest bg-primary/5 px-2 py-1 rounded-full">{msg.category}</span>
                         <span className="text-neutral-muted text-xs whitespace-nowrap">{msg.date}</span>
                       </div>
-                      <h3 className="serif-heading text-xl mb-2 group-hover:text-primary transition-colors leading-tight">{msg.title}</h3>
+                      <h3 className="serif-heading text-xl mb-2 group-hover:text-primary transition-colors leading-tight">{cleanVideoTitle(msg.title)}</h3>
                       <p className="text-sm text-neutral-deep/60 line-clamp-3 leading-relaxed mb-4">{msg.desc || 'Watch on YouTube for the full message.'}</p>
                       <div className="flex items-center text-primary text-xs font-bold uppercase tracking-widest group/link">
                         Watch Now

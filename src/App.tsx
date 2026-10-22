@@ -8,6 +8,7 @@ import Messages from './pages/Messages';
 import Contact from './pages/Contact';
 import ThankYou from './pages/ThankYou';
 import Books from './pages/Books';
+import NotFound from './pages/NotFound';
 
 import ScrollToTopButton from './components/ScrollToTopButton';
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/books" element={<Books />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

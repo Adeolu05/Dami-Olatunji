@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import NewsletterSignup from '../components/NewsletterSignup';
 import VideoCarousel from '../components/VideoCarousel';
 import youtubeCatalog from '../data/youtubeMessages.json';
-import { onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
+import { cleanVideoTitle, onlyMainVideos, sortVideosNewestFirst } from '../lib/youtubeCatalog';
 
 const homeLatestMessages = sortVideosNewestFirst(onlyMainVideos(youtubeCatalog.videos)).slice(0, 2);
 
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
-            src="images/Dami1.jpg"
+            src="/images/Dami1.jpg"
             alt="Dami Olatunji"
             className="w-full h-full object-cover object-center animate-fade-in"
           />
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <div className="relative group">
                 <img
-                  src="images/Dami11.jpg"
+                  src="/images/Dami11.jpg"
                   alt="Dami Speaking"
                   className="rounded-lg shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700 w-full object-cover aspect-[4/5]"
                 />
@@ -135,7 +135,7 @@ const Home: React.FC = () => {
                 className="group block bg-white p-4 pb-8 rounded-2xl hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 no-underline text-inherit"
               >
                 <div className="relative aspect-video overflow-hidden rounded-xl mb-6">
-                  <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img src={item.img} alt={cleanVideoTitle(item.title)} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                     <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:bg-primary transition-colors">
                       <span className="material-icons text-white text-2xl ml-1">play_arrow</span>
@@ -144,7 +144,7 @@ const Home: React.FC = () => {
                 </div>
                 <div className="px-2">
                   <span className="text-primary text-[10px] font-bold uppercase tracking-widest">{item.category}</span>
-                  <h3 className="serif-heading text-xl mt-3 mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
+                  <h3 className="serif-heading text-xl mt-3 mb-2 group-hover:text-primary transition-colors">{cleanVideoTitle(item.title)}</h3>
                   <p className="text-sm text-neutral-deep/60 leading-relaxed line-clamp-2">
                     {item.desc ? item.desc : 'Watch on YouTube for the full message.'}
                   </p>
@@ -162,7 +162,7 @@ const Home: React.FC = () => {
             <div className="w-full lg:w-1/2 relative group">
               <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                 <img
-                  src="images/herdentity.jpg"
+                  src="/images/herdentity.jpg"
                   alt="Herdentity Movement"
                   className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
                 />

@@ -1,17 +1,13 @@
-import {
-  DEFAULT_SHORT_MAX_SECONDS,
-  looksLikeYouTubeShortTitleOrDesc,
-  parseDisplayDurationToSeconds,
-} from './shortsDetection';
-
 /** Preferred order for filter buttons when those categories exist in the catalog. */
 export const CANONICAL_CATEGORY_ORDER = [
   'Identity & Purpose',
   'Emotional Intelligence',
+  'Motherhood & Family',
   'Leadership',
   'Relationships',
   'Finance',
   'Spiritual Growth',
+  'Life & Vlogs',
 ] as const;
 
 export function sortVideosNewestFirst<T extends { publishedAt: string }>(videos: readonly T[]): T[] {
@@ -23,25 +19,25 @@ export function sortVideosNewestFirst<T extends { publishedAt: string }>(videos:
 type CatalogVideo = {
   type: string;
   link: string;
-  title?: string;
-  desc?: string;
-  duration?: string;
 };
 
-/** Long-form uploads only: no /shorts/ URLs, no Shorts hashtags, not over-short by duration. */
-export function onlyMainVideos<T extends CatalogVideo>(
-  videos: readonly T[],
-  shortMaxSeconds: number = DEFAULT_SHORT_MAX_SECONDS,
-): T[] {
-  return videos.filter((v) => {
-    if (v.type !== 'Video' || v.link.includes('/shorts/')) return false;
-    const title = v.title ?? '';
-    const desc = v.desc ?? '';
-    if (looksLikeYouTubeShortTitleOrDesc(title, desc)) return false;
-    const sec = v.duration ? parseDisplayDurationToSeconds(v.duration) : null;
-    if (sec !== null && sec <= shortMaxSeconds) return false;
-    return true;
-  });
+/**
+ * Safety net only: the catalog is built from the channel's long-form playlist, which never
+ * contains Shorts. Hashtags aren't checked — many regular videos carry #shorts-style tags.
+ */
+export function onlyMainVideos<T extends CatalogVideo>(videos: readonly T[]): T[] {
+  return videos.filter((v) => v.type === 'Video' && !v.link.includes('/shorts/'));
+}
+
+/** Strip channel-name / year suffixes ("|| Dami Oladele || 2021") and stray @handles from titles. */
+export function cleanVideoTitle(title: string): string {
+  const parts = title
+    .replace(/​/g, '')
+    .replace(/\s*@\s*herdentity\s*/gi, ' ')
+    .split(/\s*\|\|?\s*/)
+    .map((p) => p.trim())
+    .filter((p) => p && !/^(dami ola(tunji|dele)|herdentity|\d{4})$/i.test(p));
+  return parts.join(' | ').replace(/\s+/g, ' ').trim() || title.trim();
 }
 
 /** Sidebar topics: only categories that appear on at least one video, plus All Messages first. */

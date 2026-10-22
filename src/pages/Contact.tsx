@@ -10,7 +10,7 @@ const Contact: React.FC = () => {
                 {/* Background Image */}
                 <div className="absolute inset-0 w-full h-full">
                     <img
-                        src="images/Dami12.jpg"
+                        src="/images/Dami12.jpg"
                         alt="Contact Dami Olatunji"
                         className="w-full h-full object-cover object-center animate-fade-in"
                     />

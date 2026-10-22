@@ -1,13 +1,20 @@
 /**
  * Builds src/data/youtubeMessages.json from the YouTube channel.
  *
- * Preferred: YOUTUBE_API_KEY — lists the full uploads playlist (paginated),
- * keeps only main videos: excludes Shorts URLs, #shorts-style tags, and uploads ≤ YOUTUBE_SHORT_MAX_SECONDS (default 180).
+ * Source of truth is the channel's long-form playlist ("UULF" + channel id without "UC"):
+ * YouTube's own list of regular uploads, i.e. the channel's Videos tab. It never contains
+ * Shorts or livestreams, so no hashtag/duration guessing is needed.
  *
- * Fallback: no API key — Atom RSS (~15 recent items), then same Shorts filter.
+ * Preferred: YOUTUBE_API_KEY — pages through the whole long-form playlist.
+ *
+ * Fallback: no API key (or the key is rejected) — the playlist's RSS feed (15 newest videos)
+ * is merged into the existing catalog. Older entries are re-checked on their watch page and
+ * dropped once they turn private, unlisted, deleted, live or Short. If a check can't be read
+ * (network/consent page) the entry is kept as-is, so a bad run never empties the site.
  *
  * Usage: npm run fetch-messages
- * Optional: YOUTUBE_CHANNEL_ID=UC...  YOUTUBE_SHORT_MAX_SECONDS=180
+ *        npm run fetch-messages -- --add VIDEO_ID,VIDEO_ID   (backfill older videos without an API key)
+ * Optional: YOUTUBE_CHANNEL_ID=UC...
  */
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
@@ -24,13 +31,25 @@ const ENV_PATH = join(ROOT, '.env');
 /** Default: @damiolatunji / Herdentity */
 const DEFAULT_CHANNEL_ID = 'UCyfEw0p5Rx-oGpyex3RWNTw';
 
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36',
+  'Accept-Language': 'en-US,en;q=0.9',
+  Cookie: 'CONSENT=YES+1',
+};
+
+/** Pause between watch-page reads (no-key mode) so YouTube doesn't answer 429. */
+const WATCH_PAGE_DELAY_MS = 1500;
+
+/** Keep in sync with CANONICAL_CATEGORY_ORDER in src/lib/youtubeCatalog.ts. */
 const CATEGORIES = [
   'Identity & Purpose',
   'Emotional Intelligence',
+  'Motherhood & Family',
   'Leadership',
   'Relationships',
   'Finance',
   'Spiritual Growth',
+  'Life & Vlogs',
 ];
 
 function loadDotEnv() {
@@ -54,17 +73,41 @@ function loadDotEnv() {
   }
 }
 
+/** `--add ID,ID` or `--add=ID,ID` */
+function parseAddIds(argv) {
+  const ids = [];
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    let value = null;
+    if (arg === '--add') value = argv[++i] ?? '';
+    else if (arg.startsWith('--add=')) value = arg.slice('--add='.length);
+    if (value) ids.push(...value.split(',').map((s) => s.trim()).filter(Boolean));
+  }
+  return ids;
+}
+
+function longFormPlaylistId(channelId) {
+  return `UULF${channelId.replace(/^UC/, '')}`;
+}
+
 function inferCategory(text) {
   const t = text.toLowerCase();
+  if (/\b(vlog|vlogmas|birthday|karaoke|grwm|graduation)\b|spend the day with me/.test(t)) return 'Life & Vlogs';
   if (/\b(finance|financial|money|budget|invest|income|wealth)\b/.test(t)) return 'Finance';
+  if (/\b(motherhood|mum|mom|mums|moms|mother|parenting|daughter|son|kids|children|family)\b/.test(t))
+    return 'Motherhood & Family';
   if (/\b(relationship|marriage|dating|spouse|partner|communication)\b/.test(t)) return 'Relationships';
   if (/\b(leadership|leader|influence|team|vision)\b/.test(t)) return 'Leadership';
-  if (/\b(purpose|identity|calling|destiny|assignment|faith|herdentity|self-discovery|women empowerment)\b/.test(t))
+  if (/\b(purpose|identity|calling|destiny|assignment|herdentity|self-discovery|women empowerment)\b/.test(t))
     return 'Identity & Purpose';
   if (/\b(confidence|boundary|boundaries|emotion|anxious|self-worth|people-pleas|mental health|mindset)\b/.test(t))
     return 'Emotional Intelligence';
-  if (/\b(worth|spiritual|god|prayer|scripture|psalm|pastor|sermon)\b/.test(t)) return 'Spiritual Growth';
   return 'Spiritual Growth';
+}
+
+function pickCategory(videoId, title, desc, overrides) {
+  const overrideCat = overrides[videoId];
+  return CATEGORIES.includes(overrideCat) ? overrideCat : inferCategory(`${title}\n${desc}`);
 }
 
 function formatPublishedDate(iso) {
@@ -79,17 +122,23 @@ function formatPublishedDate(iso) {
   }
 }
 
-function parseIsoDuration(iso) {
-  if (!iso || typeof iso !== 'string') return '';
-  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!m) return '';
-  const h = Number(m[1] || 0);
-  const min = Number(m[2] || 0);
-  const s = Number(m[3] || 0);
+function formatSeconds(total) {
+  if (!Number.isFinite(total) || total <= 0) return '';
+  const h = Math.floor(total / 3600);
+  const min = Math.floor((total % 3600) / 60);
+  const s = Math.floor(total % 60);
   if (h > 0) {
     return `${h}:${String(min).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
   return `${min}:${String(s).padStart(2, '0')}`;
+}
+
+/** "5:51" / "1:06:02" → seconds */
+function displayDurationSeconds(display) {
+  if (!display || typeof display !== 'string') return null;
+  const parts = display.trim().split(':').map(Number);
+  if (parts.length < 2 || parts.some((n) => Number.isNaN(n))) return null;
+  return parts.reduce((total, n) => total * 60 + n, 0);
 }
 
 function isoDurationSeconds(iso) {
@@ -99,32 +148,6 @@ function isoDurationSeconds(iso) {
   return Number(m[1] || 0) * 3600 + Number(m[2] || 0) * 60 + Number(m[3] || 0);
 }
 
-/** Keep in sync with src/lib/shortsDetection.ts (SHORTS_TEXT_RE). */
-const SHORTS_TEXT_RE =
-  /[#＃]shorts\b|[#＃]youtubeshorts\b|[#＃]ytshorts\b|\b100daysytshorts\b|\bshortsafrica\b|\bpullupyoshorts\b|\bshortswithmotso\b|\byoutubeshorts\b|\bshortvideo\b|\bviralshorts\b/i;
-
-function looksLikeMarkedShort(title, desc) {
-  return SHORTS_TEXT_RE.test(`${title}\n${desc}`);
-}
-
-function parseDisplayDurationSeconds(display) {
-  if (!display || typeof display !== 'string') return null;
-  const s = display.trim();
-  if (!s) return null;
-  const parts = s.split(':').map((p) => Number(String(p).trim()));
-  if (parts.some((n) => Number.isNaN(n))) return null;
-  if (parts.length === 2) return parts[0] * 60 + parts[1];
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-  return null;
-}
-
-/** Drop Shorts: hashtags / common Shorts tags, or duration at/below max (null duration = keep). */
-function isExcludedAsShort(title, desc, durationSec, shortMaxSeconds) {
-  if (looksLikeMarkedShort(title, desc)) return true;
-  if (durationSec !== null && durationSec <= shortMaxSeconds) return true;
-  return false;
-}
-
 function pickAlternateLink(linkNode) {
   if (!linkNode) return '';
   const links = Array.isArray(linkNode) ? linkNode : [linkNode];
@@ -132,46 +155,40 @@ function pickAlternateLink(linkNode) {
   return alt?.['@_href'] || links[0]?.['@_href'] || '';
 }
 
-function loadOverrides() {
-  if (!existsSync(OVERRIDES_PATH)) return {};
+function loadJson(path, fallback) {
+  if (!existsSync(path)) return fallback;
   try {
-    const raw = readFileSync(OVERRIDES_PATH, 'utf8');
-    const j = JSON.parse(raw);
-    return j && typeof j === 'object' ? j : {};
+    return JSON.parse(readFileSync(path, 'utf8'));
   } catch {
-    return {};
+    return fallback;
   }
 }
 
-function mapApiItemToVideo(item, overrides) {
-  const videoId = item.id;
-  const sn = item.snippet || {};
-  const cd = item.contentDetails || {};
-  const title = (sn.title || '').trim();
-  const desc = (sn.description || '').trim();
-  const publishedAt = sn.publishedAt || '';
-  const durIso = cd.duration;
-  const inferred = inferCategory(`${title}\n${desc}`);
-  const overrideCat = overrides[videoId];
-  const category = CATEGORIES.includes(overrideCat) ? overrideCat : inferred;
-  const thumbs = sn.thumbnails || {};
-  const img =
-    thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+function loadOverrides() {
+  const j = loadJson(OVERRIDES_PATH, {});
+  return j && typeof j === 'object' ? j : {};
+}
 
+function buildVideo({ videoId, title, desc, publishedAt, durationSec, img }, overrides) {
   return {
     videoId,
     title,
     desc,
     publishedAt,
     date: formatPublishedDate(publishedAt),
-    duration: parseIsoDuration(durIso),
+    duration: formatSeconds(durationSec),
     type: 'Video',
     link: `https://www.youtube.com/watch?v=${videoId}`,
-    img,
-    category,
-    _durationSec: isoDurationSeconds(durIso),
+    img: img || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    category: pickCategory(videoId, title, desc, overrides),
   };
 }
+
+function sortNewestFirst(videos) {
+  return videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+}
+
+// --- YouTube Data API ------------------------------------------------------
 
 async function apiGetJson(url) {
   const res = await fetch(url);
@@ -182,10 +199,10 @@ async function apiGetJson(url) {
   return JSON.parse(text);
 }
 
-async function resolveUploadsPlaylist(apiKey, channelId) {
+async function resolveChannelId(apiKey, channelId) {
   const tryChannel = async (params) => {
     const url = new URL('https://www.googleapis.com/youtube/v3/channels');
-    url.searchParams.set('part', 'contentDetails');
+    url.searchParams.set('part', 'id');
     for (const [k, v] of Object.entries(params)) {
       url.searchParams.set(k, v);
     }
@@ -199,9 +216,7 @@ async function resolveUploadsPlaylist(apiKey, channelId) {
   }
   const ch = data.items?.[0];
   if (!ch) throw new Error('Channel not found (check YOUTUBE_CHANNEL_ID or handle)');
-  const uploads = ch.contentDetails?.relatedPlaylists?.uploads;
-  if (!uploads) throw new Error('No uploads playlist on channel');
-  return { uploadsPlaylistId: uploads, resolvedChannelId: ch.id };
+  return ch.id;
 }
 
 async function listAllPlaylistVideoIds(apiKey, playlistId) {
@@ -230,7 +245,7 @@ async function fetchVideosByIds(apiKey, videoIds) {
   for (let i = 0; i < videoIds.length; i += chunkSize) {
     const chunk = videoIds.slice(i, i + chunkSize);
     const url = new URL('https://www.googleapis.com/youtube/v3/videos');
-    url.searchParams.set('part', 'snippet,contentDetails');
+    url.searchParams.set('part', 'snippet,contentDetails,status');
     url.searchParams.set('id', chunk.join(','));
     url.searchParams.set('key', apiKey);
     const data = await apiGetJson(url.href);
@@ -239,142 +254,188 @@ async function fetchVideosByIds(apiKey, videoIds) {
   return items;
 }
 
-async function fetchViaDataApi(apiKey, channelId, shortMaxSeconds, overrides) {
-  const { uploadsPlaylistId, resolvedChannelId } = await resolveUploadsPlaylist(apiKey, channelId);
-  const allIds = await listAllPlaylistVideoIds(apiKey, uploadsPlaylistId);
-  if (allIds.length === 0) return { videos: [], resolvedChannelId };
+async function fetchViaDataApi(apiKey, channelId, overrides) {
+  const resolvedChannelId = await resolveChannelId(apiKey, channelId);
+  const ids = await listAllPlaylistVideoIds(apiKey, longFormPlaylistId(resolvedChannelId));
+  const details = ids.length ? await fetchVideosByIds(apiKey, ids) : [];
 
-  const details = await fetchVideosByIds(apiKey, allIds);
-  const videos = [];
+  const videos = details
+    .filter((item) => item.status?.privacyStatus === 'public')
+    .map((item) => {
+      const sn = item.snippet || {};
+      const thumbs = sn.thumbnails || {};
+      return buildVideo(
+        {
+          videoId: item.id,
+          title: (sn.title || '').trim(),
+          desc: (sn.description || '').trim(),
+          publishedAt: sn.publishedAt || '',
+          durationSec: isoDurationSeconds(item.contentDetails?.duration),
+          img: thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url,
+        },
+        overrides,
+      );
+    });
 
-  for (const item of details) {
-    const row = mapApiItemToVideo(item, overrides);
-    const sec = row._durationSec;
-    delete row._durationSec;
-    if (isExcludedAsShort(row.title, row.desc, sec, shortMaxSeconds)) continue;
-    videos.push(row);
-  }
-
-  videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-  return { videos, resolvedChannelId };
+  return { videos: sortNewestFirst(videos), resolvedChannelId };
 }
 
-async function fetchViaRss(channelId, apiKey, overrides, shortMaxSeconds) {
-  const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
-  const res = await fetch(feedUrl, {
-    headers: { 'User-Agent': 'damiolatunji-site-fetch/1.0' },
-  });
+// --- No-key fallback: RSS + watch-page checks ------------------------------
+
+async function fetchLongFormRss(channelId) {
+  const feedUrl = `https://www.youtube.com/feeds/videos.xml?playlist_id=${longFormPlaylistId(channelId)}`;
+  const res = await fetch(feedUrl, { headers: { 'User-Agent': 'damiolatunji-site-fetch/1.0' } });
   if (!res.ok) {
     throw new Error(`RSS fetch failed: ${res.status} ${feedUrl}`);
   }
-  const xml = await res.text();
-
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: '@_',
-  });
-  const doc = parser.parse(xml);
+  const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
+  const doc = parser.parse(await res.text());
   const rawEntries = doc.feed?.entry;
   const entries = rawEntries ? (Array.isArray(rawEntries) ? rawEntries : [rawEntries]) : [];
 
-  const videos = entries
+  return entries
     .map((entry) => {
-      const videoId = entry['yt:videoId'];
-      const title = (entry.title || '').toString().trim();
-      const publishedAt = (entry.published || '').toString();
-      const link = pickAlternateLink(entry.link);
       const group = entry['media:group'] || {};
-      const thumb = group['media:thumbnail'];
-      const thumbUrl = thumb?.['@_url'] || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-      let desc = group['media:description'];
-      if (desc === undefined || desc === null) desc = '';
-      desc = String(desc).trim();
-
-      const isShort = link.includes('/shorts/');
-      const inferred = inferCategory(`${title}\n${desc}`);
-      const overrideCat = overrides[videoId];
-      const category = CATEGORIES.includes(overrideCat) ? overrideCat : inferred;
-
       return {
-        videoId,
-        title,
-        desc,
-        publishedAt,
-        date: formatPublishedDate(publishedAt),
-        duration: '',
-        type: isShort ? 'Short' : 'Video',
-        link,
-        img: thumbUrl,
-        category,
+        videoId: entry['yt:videoId'],
+        title: String(entry.title ?? '').trim(),
+        desc: String(group['media:description'] ?? '').trim(),
+        publishedAt: String(entry.published ?? ''),
+        link: pickAlternateLink(entry.link),
       };
     })
-    .filter((v) => v.type === 'Video' && !v.link.includes('/shorts/'))
-    .filter((v) => !looksLikeMarkedShort(v.title, v.desc));
-
-  const ids = videos.map((v) => v.videoId).filter(Boolean);
-  if (apiKey && ids.length) {
-    const durationMap = await fetchDurationsMap(ids, apiKey);
-    for (const v of videos) {
-      v.duration = durationMap.get(v.videoId) || '';
-    }
-  }
-
-  const filtered = videos.filter((v) => {
-    const sec = parseDisplayDurationSeconds(v.duration);
-    return !isExcludedAsShort(v.title, v.desc, sec, shortMaxSeconds);
-  });
-
-  filtered.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-  return filtered;
+    .filter((v) => v.videoId && !v.link.includes('/shorts/'));
 }
 
-async function fetchDurationsMap(videoIds, apiKey) {
-  const map = new Map();
-  const chunkSize = 50;
-  for (let i = 0; i < videoIds.length; i += chunkSize) {
-    const chunk = videoIds.slice(i, i + chunkSize);
-    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
-    url.searchParams.set('part', 'contentDetails');
-    url.searchParams.set('id', chunk.join(','));
-    url.searchParams.set('key', apiKey);
-    const res = await fetch(url);
-    if (!res.ok) continue;
-    const data = await res.json();
-    for (const item of data.items || []) {
-      const id = item.id;
-      const iso = item.contentDetails?.duration;
-      map.set(id, parseIsoDuration(iso));
-    }
+/**
+ * Reads a video's public watch page. Returns null when the page can't be understood
+ * (blocked, consent wall, markup change) so callers can keep what they already have.
+ */
+async function fetchWatchInfo(videoId) {
+  await new Promise((r) => setTimeout(r, WATCH_PAGE_DELAY_MS));
+  try {
+    const res = await fetch(`https://www.youtube.com/watch?v=${videoId}&hl=en`, { headers: BROWSER_HEADERS });
+    if (!res.ok) return null;
+    const html = await res.text();
+    const m = html.match(/var ytInitialPlayerResponse\s*=\s*(\{.+?\});\s*(?:var |<\/script>)/s);
+    if (!m) return null;
+    const player = JSON.parse(m[1]);
+    const status = player.playabilityStatus?.status;
+    if (!status) return null;
+    const vd = player.videoDetails || {};
+    const mf = player.microformat?.playerMicroformatRenderer || {};
+    return {
+      available: status === 'OK',
+      unlisted: mf.isUnlisted === true,
+      live: vd.isLiveContent === true,
+      title: (vd.title || '').trim(),
+      desc: (vd.shortDescription || '').trim(),
+      publishedAt: mf.publishDate || mf.uploadDate || '',
+      durationSec: Number(vd.lengthSeconds) || null,
+    };
+  } catch {
+    return null;
   }
-  return map;
+}
+
+/** /shorts/ID answers 200 for a Short and redirects to /watch for a regular video. */
+async function isShort(videoId) {
+  try {
+    const res = await fetch(`https://www.youtube.com/shorts/${videoId}`, {
+      headers: BROWSER_HEADERS,
+      redirect: 'manual',
+    });
+    return res.status === 200;
+  } catch {
+    return false;
+  }
+}
+
+async function fetchViaRssMerge(channelId, existingVideos, addIds, overrides) {
+  const rssVideos = await fetchLongFormRss(channelId);
+  const rssIds = new Set(rssVideos.map((v) => v.videoId));
+  const existingById = new Map(existingVideos.map((v) => [v.videoId, v]));
+  const videos = [];
+  let dropped = 0;
+
+  for (const r of rssVideos) {
+    const existing = existingById.get(r.videoId);
+    let durationSec = displayDurationSeconds(existing?.duration);
+    // Only look up videos we haven't seen yet (duration), to stay well under YouTube's rate limit.
+    if (durationSec === null) {
+      const info = await fetchWatchInfo(r.videoId);
+      if (info?.live) continue;
+      durationSec = info?.durationSec ?? null;
+    }
+    videos.push(buildVideo({ ...r, durationSec, img: existing?.img }, overrides));
+  }
+
+  const olderIds = [...new Set([...existingById.keys(), ...addIds])].filter((id) => !rssIds.has(id));
+  for (const id of olderIds) {
+    const existing = existingById.get(id);
+    const info = await fetchWatchInfo(id);
+    if (!info) {
+      if (existing) {
+        videos.push({ ...existing, category: pickCategory(id, existing.title, existing.desc, overrides) });
+      } else {
+        console.warn(`  ! ${id}: could not read watch page, skipped`);
+      }
+      continue;
+    }
+    // Catalog entries came from the long-form playlist; only hand-added ids need the Shorts check.
+    if (!info.available || info.unlisted || info.live || (!existing && (await isShort(id)))) {
+      if (existing) {
+        dropped++;
+        console.log(`  - removed ${id} (${info.available ? 'unlisted/live/Short' : 'private or deleted'}): ${existing.title}`);
+      } else {
+        console.warn(`  ! ${id}: not a public long-form video, skipped`);
+      }
+      continue;
+    }
+    videos.push(
+      buildVideo(
+        {
+          videoId: id,
+          title: info.title || existing?.title || '',
+          desc: info.desc || existing?.desc || '',
+          publishedAt: info.publishedAt || existing?.publishedAt || '',
+          durationSec: info.durationSec ?? displayDurationSeconds(existing?.duration),
+          img: existing?.img,
+        },
+        overrides,
+      ),
+    );
+  }
+
+  return { videos: sortNewestFirst(videos), dropped };
 }
 
 async function main() {
   loadDotEnv();
   const channelId = process.env.YOUTUBE_CHANNEL_ID || DEFAULT_CHANNEL_ID;
   const apiKey = (process.env.YOUTUBE_API_KEY || '').trim();
-  const shortMaxSeconds = Math.max(1, Number(process.env.YOUTUBE_SHORT_MAX_SECONDS || 180) || 180);
+  const addIds = parseAddIds(process.argv.slice(2));
   const overrides = loadOverrides();
+  const existing = loadJson(OUT, null);
 
-  let videos = [];
+  let videos = null;
   let effectiveChannelId = channelId;
-  let source = 'rss';
+  let source = 'rss-merge';
 
   if (apiKey) {
     try {
-      const result = await fetchViaDataApi(apiKey, channelId, shortMaxSeconds, overrides);
+      const result = await fetchViaDataApi(apiKey, channelId, overrides);
       videos = result.videos;
       effectiveChannelId = result.resolvedChannelId || channelId;
-      if (videos.length > 0) {
-        source = 'youtube-data-api';
-        console.log(
-          `API: ${videos.length} main videos (Shorts excluded: tags + ≤${shortMaxSeconds}s) from uploads playlist`,
-        );
-      }
+      source = 'youtube-data-api';
+      console.log(`API: ${videos.length} long-form videos from the channel's Videos playlist`);
+      if (addIds.length) console.log('  (--add ignored: the API already returns every public video)');
     } catch (err) {
       const msg = String(err.message || err);
-      console.warn('YouTube Data API failed, using RSS fallback:', msg);
-      if (msg.includes('403') && msg.toLowerCase().includes('block')) {
+      console.warn('YouTube Data API failed, using RSS fallback:', msg.split('\n')[0]);
+      if (msg.includes('API Key not found') || msg.includes('API key not valid')) {
+        console.warn('\n  → YOUTUBE_API_KEY in .env was rejected (deleted or mistyped). Create a new key, see .env.example.\n');
+      } else if (msg.includes('403') && msg.toLowerCase().includes('block')) {
         console.warn(
           '\n  → This is usually an API key restriction issue. In Google Cloud Console → Credentials → your key:\n' +
             '     set "Application restrictions" to None (for local scripts), not "HTTP referrers".\n' +
@@ -384,14 +445,17 @@ async function main() {
     }
   }
 
-  if (videos.length === 0) {
-    videos = await fetchViaRss(channelId, apiKey, overrides, shortMaxSeconds);
-    if (apiKey) source = 'rss-fallback';
+  if (!videos) {
+    const result = await fetchViaRssMerge(channelId, existing?.videos ?? [], addIds, overrides);
+    videos = result.videos;
     console.log(
-      apiKey
-        ? `RSS fallback: ${videos.length} long-form videos`
-        : `RSS: ${videos.length} long-form videos (add YOUTUBE_API_KEY in .env for full uploads list)`,
+      `RSS merge: ${videos.length} long-form videos (${result.dropped} removed)` +
+        (apiKey ? '' : ' — add YOUTUBE_API_KEY in .env to list the full channel automatically'),
     );
+  }
+
+  if (videos.length === 0) {
+    throw new Error('No videos found; leaving the existing catalog untouched.');
   }
 
   const payload = {

@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-primary/5 pt-6 flex flex-col md:flex-row justify-center items-center text-[10px] uppercase tracking-widest font-bold opacity-60 space-y-2 md:space-y-0 md:space-x-4">
-          <p>© 2026 Dami Olatunji. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Dami Olatunji. All rights reserved.</p>
           <span className="hidden md:inline text-primary/20">•</span>
           <p>Made with ❤️ by <a href="https://dpeluola.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors border-b border-transparent hover:border-primary">David Peluola</a></p>
         </div>
